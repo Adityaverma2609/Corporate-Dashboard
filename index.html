@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samyak - Corporate Communication Hub</title>
+    <style>
+        :root {
+            --primary: #002147; /* Navy Blue */
+            --secondary: #0056b3;
+            --accent: #ffcc00;
+            --danger: #e63946;
+            --success: #2a9d8f;
+            --bg: #f0f2f5;
+            --sidebar-width: 280px;
+        }
+
+        /* Essential Reset to fix the "double" glitch */
+        * { box-sizing: border-box; }
+        
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Helvetica, sans-serif;
+            background-color: var(--bg);
+            overflow: hidden;
+        }
+
+        /* Main Wrapper */
+        .app-container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: var(--sidebar-width);
+            min-width: var(--sidebar-width);
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 10px;
+        }
+
+        .sidebar-header h2 { margin: 0; font-size: 22px; color: var(--accent); }
+        .sidebar-header p { font-size: 12px; margin: 5px 0 0; opacity: 0.7; }
+
+        .nav-item {
+            padding: 15px 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+            border-left: 4px solid transparent;
+        }
+
+        .nav-item:hover { background: rgba(255,255,255,0.1); }
+        .nav-item.active {
+            background: rgba(255,255,255,0.15);
+            border-left: 4px solid var(--accent);
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Content Area */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            background: var(--bg);
+        }
+
+        .tab-content { display: none; animation: fadeIn 0.4s ease; }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* UI Components */
+        .header-strip {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+
+        .metric-card h1 { font-size: 48px; margin: 10px 0; }
+        .metric-card p { color: #666; font-size: 14px; margin: 0; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        th { background: #f8f9fa; color: var(--primary); text-align: left; padding: 18px; font-weight: 600; border-bottom: 2px solid #eee; }
+        td { padding: 18px; border-bottom: 1px solid #eee; font-size: 14px; }
+
+        /* Status Badges */
+        .badge { padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
+        .bg-red { background: #ffe3e3; color: #c92a2a; }
+        .bg-green { background: #e6fcf5; color: #087f5b; }
+        .bg-yellow { background: #fff9db; color: #f08c00; }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .btn-primary { background: var(--secondary); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-primary:hover { opacity: 0.9; }
+
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            width: 180px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>SAMYAK</h2>
+            <p>Corporate Communication Portal</p>
+        </div>
+        <div class="nav-item active" onclick="switchTab(event, 'overview')">📊 Executive Overview</div>
+        <div class="nav-item" onclick="switchTab(event, 'approvals')">✍️ Approval Desk</div>
+        <div class="nav-item" onclick="switchTab(event, 'inventory')">📦 Ops-Sales Sync</div>
+        <div class="nav-item" onclick="switchTab(event, 'tasks')">🎯 Accountability Tracker</div>
+        <div class="nav-item" onclick="switchTab(event, 'events')">📅 Event Central</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+        <!-- TAB 1: OVERVIEW -->
+        <div id="overview" class="tab-content active">
+            <div class="header-strip">
+                <div>
+                    <h1 style="margin:0; font-size: 32px;">Good Morning, Manager</h1>
+                </div>
+                <div style="text-align: right;">
+                    <strong id="current-date" style="color: #666;"></strong>
+                </div>
+            </div>
+            
+            <div class="grid">
+                <div class="card metric-card" style="border-left: 6px solid var(--danger);">
+                    <h3>Pending Approvals</h3>
+                    <h1 style="color:var(--danger)">2</h1>
+                    <p>Critical: Finance Fund Release</p>
+                </div>
+                <div class="card metric-card" style="border-left: 6px solid var(--accent);">
+                    <h3>Unassigned Tasks</h3>
+                    <h1 style="color:var(--accent)">1</h1>
+                    <p>Requirement: Monthly Report</p>
+                </div>
+                <div class="card metric-card" style="border-left: 6px solid var(--success);">
+                    <h3>Team Status</h3>
+                    <h1 style="color:var(--success)">95%</h1>
+                    <p>Active (Vikram R. on leave)</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📢 Manager's Daily Intimation</h3>
+                <p style="line-height: 1.6; color: #444;">Team, kindly ensure all project updates are logged here by 5:00 PM today. We are strictly moving away from WhatsApp for status reporting to ensure an audit trail. Please check the "Ops-Sales Sync" before quoting availability to clients.</p>
+            </div>
+        </div>
+
+        <!-- TAB 2: APPROVALS -->
+        <div id="approvals" class="tab-content">
+            <h1>✍️ Digital Approval Desk</h1>
+            <p><i>Kindly review and provide your digital sign-off for pending financial requests.</i></p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Request Ref</th>
+                        <th>Initiator</th>
+                        <th>Particulars</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#FIN-2024-01</td>
+                        <td>Finance Team</td>
+                        <td>Release of Q3 Marketing Budget (₹5,00,000)</td>
+                        <td><span id="stat1" class="badge bg-red">Pending Manager</span></td>
+                        <td><button class="btn btn-success" onclick="approve('stat1', this)">Digital Sign-off</button></td>
+                    </tr>
+                    <tr>
+                        <td>#OPS-2024-88</td>
+                        <td>Logistics</td>
+                        <td>Annual Event Vendor Payment</td>
+                        <td><span id="stat2" class="badge bg-red">Pending Manager</span></td>
+                        <td><button class="btn btn-success" onclick="approve('stat2', this)">Digital Sign-off</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- TAB 3: INVENTORY -->
+        <div id="inventory" class="tab-content">
+            <h1>📦 Live Operations & Sales Sync</h1>
+            <div class="card" style="background-color: #fff4e6; border-left: 5px solid #f08c00;">
+                <strong>Leave Intimation:</strong> Vikram R. (Ops) is Out of Office. Handover has been given to <b>Anjali P.</b> All Sales queries should be addressed to her to avoid delays.
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product Model</th>
+                        <th>Availability</th>
+                        <th>Current Custodian</th>
+                        <th>Last Status Update</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Enterprise Suite V2</td>
+                        <td><span class="badge bg-green">Ready to Ship</span></td>
+                        <td>Anjali P. (Ops)</td>
+                        <td>10 mins ago</td>
+                    </tr>
+                    <tr>
+                        <td>Cloud Security Pro</td>
+                        <td><span class="badge bg-yellow">Backordered</span></td>
+                        <td>Anjali P. (Ops)</td>
+                        <td>1 hour ago</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- TAB 4: TASKS -->
+        <div id="tasks" class="tab-content">
+            <h1>🎯 Task Accountability Tracker</h1>
+            <p>Define clear ownership to eliminate the "Accountability Gap" (Problem 6).</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Requirement</th>
+                        <th>Priority</th>
+                        <th>Assigned Owner</th>
+                        <th>Deadline</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Campaign Finalization</td>
+                        <td><span class="badge bg-red">High</span></td>
+                        <td>Rahul S. (Marketing)</td>
+                        <td>15-Sept</td>
+                        <td><span class="badge bg-green">Locked</span></td>
+                    </tr>
+                    <tr>
+                        <td>Quarterly Data Report</td>
+                        <td><span class="badge bg-yellow">Medium</span></td>
+                        <td><input type="text" id="owner-input" placeholder="Enter Name..."></td>
+                        <td>20-Sept</td>
+                        <td><button class="btn btn-primary" onclick="assignTask()">Assign Owner</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- TAB 5: EVENTS -->
+        <div id="events" class="tab-content">
+            <h1>📅 Unified Event Hub</h1>
+            <p>Single source of truth for Registration, Hospitality, and Coordination teams.</p>
+            <div class="grid">
+                <div class="card">
+                    <h4>Master Guest List</h4>
+                    <p>Total Confirmed: 120</p>
+                    <button class="btn btn-primary">Download Verified List</button>
+                </div>
+                <div class="card">
+                    <h4>Hospitality Tracker</h4>
+                    <p>Rooms Allotted: 45/50</p>
+                    <span class="badge bg-green">On Schedule</span>
+                </div>
+                <div class="card">
+                    <h4>Registration Desk</h4>
+                    <p>Live Check-ins: 0</p>
+                    <span class="badge bg-yellow">Opening Soon</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function switchTab(event, tabId) {
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+    }
+
+    function approve(statusId, btn) {
+        const badge = document.getElementById(statusId);
+        badge.innerText = "Approved & Notified";
+        badge.className = "badge bg-green";
+        btn.disabled = true;
+        btn.innerText = "Completed";
+        alert("Digital sign-off recorded. The Finance department has been notified via system trigger.");
+    }
+
+    function assignTask() {
+        const name = document.getElementById('owner-input').value;
+        if(name.trim() === "") {
+            alert("Please enter a name to assign accountability.");
+        } else {
+            alert("Accountability Assigned: " + name + " is now the primary owner for this task.");
+        }
+    }
+
+    document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-IN', { 
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+    });
+</script>
+
+</body>
+</html>
